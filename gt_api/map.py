@@ -1,7 +1,17 @@
 from . import generic
 
 
-def create_drop_group(map_id, lat, lng, code, title, **properties):
+def get_public_drop_groups(map_id, include_tags=True, auth_token=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/maps/getPublicDropGroups.php",
+            "GET",
+            params={"mapId": map_id, "withTags": include_tags},
+        )
+    )
+
+
+def create_drop_group(map_id, lat, lng, code, title, auth_token=None, **properties):
     data = {
         "mapId": map_id,
         "lat": lat,
@@ -178,3 +188,13 @@ def random_grouped_map_drop(
         },
     )
     return process_response(response)
+
+
+def get_map_tags(map_id, auth_token=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/maps/getTagsByMap.php",
+            "GET",
+            params={"mapId": map_id},
+        )
+    )

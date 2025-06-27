@@ -33,7 +33,7 @@ def get_challenge_results(challenge_id, auth_token=None):
     )
 
 
-def get_own_challenges( auth_token=None):
+def get_own_challenges(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
             "https://api.geotastic.net/v1/challenge/getOwnChallenges.php",
