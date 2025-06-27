@@ -1,0 +1,2 @@
+class GeotasticAPIError(Exception):
+    pass
