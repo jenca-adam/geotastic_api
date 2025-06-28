@@ -6,15 +6,17 @@ class Client:
     def __init__(self, auth_token):
         self.auth_token = auth_token
 
+    def get_user_data(self):
+        return login.login(token=self.auth_token)
+
     @classmethod
-    def _register_endpoint(cls, endpoint, name=None):
-        name = name or endpoint.__name__
+    def _register_endpoint(cls, endpoint):
 
         @functools.wraps(endpoint)
         def replaced(self, *args, **kwargs):
             return endpoint(*args, **kwargs, auth_token=self.auth_token)
 
-        setattr(cls, name, replaced)
+        setattr(cls, endpoint.__name__, replaced)
         return endpoint
 
     @classmethod

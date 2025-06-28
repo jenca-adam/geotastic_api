@@ -3,6 +3,19 @@ from .client import Client
 
 
 @Client._register_endpoint
+def create_tag(tag_name, auth_token=None):
+    data = generic.encode_encdata({"tag": tag_name})
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/maps/createTagV2.php",
+            "POST",
+            auth_token,
+            json={"enc": data},
+        )
+    )
+
+
+@Client._register_endpoint
 def get_public_drop_groups(map_id, include_tags=True, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -14,16 +27,20 @@ def get_public_drop_groups(map_id, include_tags=True, auth_token=None):
 
 
 @Client._register_endpoint
-def create_drop_group(map_id, lat, lng, code, title, auth_token=None, **properties):
+def create_drop_group(
+    map_id, lat, lng, code, title, active=True, bias=1, auth_token=None, **properties
+):
     data = {
         "mapId": map_id,
         "lat": lat,
         "lng": lng,
         "code": code,
         "title": title,
+        "active": active,
+        "bias": bias,
+        "type": "group",
         **properties,
     }
-    print(data)
     response = generic.geotastic_api_request(
         "https://api.geotastic.net/v1/maps/updateDropGroup.php",
         "POST",
