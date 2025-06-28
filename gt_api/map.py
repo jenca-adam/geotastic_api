@@ -20,6 +20,7 @@ def create_drop_group(map_id, lat, lng, code, title, auth_token=None, **properti
         "title": title,
         **properties,
     }
+    print(data)
     response = generic.geotastic_api_request(
         "https://api.geotastic.net/v1/maps/updateDropGroup.php",
         "POST",
@@ -38,18 +39,6 @@ def update_drop_group(group_id, auth_token=None, **properties):
         json=data,
     )
     return generic.process_response(response)
-
-
-def create_drop_group(map_id, auth_token=None, **properties):
-    data = {"mapId": group_id, **properties}
-    response = generic.geotastic_api_request(
-        "https://api.geotastic.net/v1/maps/updateDropGroup.php",
-        "POST",
-        auth_token,
-        json=data,
-    )
-    return generic.process_response(response)
-
 
 def get_drop_groups(map_id, auth_token=None):
     response = generic.geotastic_api_request(
@@ -90,7 +79,7 @@ def import_drops(drops, target_id, target_type, import_type="merge", auth_token=
             "POST",
             auth_token,
             json={
-                "drops": [drops],
+                "drops": drops,
                 "params": {
                     "targetId": target_id,
                     "targetType": target_type,
