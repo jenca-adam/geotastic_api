@@ -40,6 +40,7 @@ def update_drop_group(group_id, auth_token=None, **properties):
     )
     return generic.process_response(response)
 
+
 def get_drop_groups(map_id, auth_token=None):
     response = generic.geotastic_api_request(
         "https://api.geotastic.net/v1/maps/getDropGroups.php",
@@ -184,6 +185,17 @@ def get_map_tags(map_id, auth_token=None):
         generic.geotastic_api_request(
             "https://api.geotastic.net/v1/maps/getTagsByMap.php",
             "GET",
+            auth_token,
             params={"mapId": map_id},
         )
     )
+
+
+def increase_play_count(map_id, auth_token=None):
+    response = generic.geotastic_api_request(
+        "https://backend01.geotastic.net/v1/maps/incrementPlayedMapAmountV2.php",
+        "POST",
+        auth_token,
+        json={"enc": generic.encode_encdata({"mapId": map_id})},
+    )
+    return generic.process_response(response)

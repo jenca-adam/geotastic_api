@@ -42,6 +42,8 @@ def encode_encdata(data):
 
 def process_response(response):
     if response.ok:
+        if not response.content:
+            raise GeotasticAPIError("empty response")
         json_response = response.json()
         if json_response["status"] == "success":
             if json_response.get("enc"):
