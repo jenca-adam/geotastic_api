@@ -34,16 +34,17 @@ So for most use cases you want to use tokens.
 import gt_api
 client=gt_api.Client('d8f350a3f557adc253f5003a81d3098c06dea93f84edf10e3fabc1d92acd1771')
 ```
-#### Without Login
-Use `Client(None)`.
-Most functions will not work.
+
 ##### How do I get it?
 
 Go to geotastic and log in with your account.
 Then open the developer tools (F12 or ctrl-shift-i). Then navigate to Storage(Application-&gt;Storage for Chrome)-&gt;Local Storage-&gt;https://geotastic.net/ and scroll down to *token*. Copy the value.
 
 Please note that the token is one per session, so once you log out of the session you got the token from, you'll need to update it.
+#### Without Login
 
+Use `Client(None)`.
+Most functions will not work.
 ### Creating a drop group
 
 ```python
