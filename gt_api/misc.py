@@ -20,3 +20,16 @@ def get_community_map_markers(auth_token=None):
             auth_token,
         )
     )
+
+
+@Client._register_endpoint
+def request_api_key(auth_token=None):
+    data = generic.encode_encdata({})
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/config/requestApiKey.php",
+            "POST",
+            auth_token,
+            json={"enc": data},
+        )
+    )
