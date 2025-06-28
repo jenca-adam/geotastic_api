@@ -1,11 +1,12 @@
 from .errors import GeotasticAPIError
 from .generic import decode_encdata
 import requests
+import os
 
-FINGERPRINT = "122a458e7f0403b8a5bbc6253a3ab294"  # doesn't really matter but something needs to be there
 
-
-def login(mail=None, password=None, token=None):
+def login(mail=None, password=None, token=None, fingerprint=None):
+    if fingerprint is None:
+        fingerprint = os.urandom(16).hex()
     creds = {}
     if mail:
         creds["mail"] = mail
@@ -13,14 +14,13 @@ def login(mail=None, password=None, token=None):
         creds["password"] = password
     if token:
         creds["token"] = token
-    print(creds)
     response = requests.post(
         "https://api.geotastic.net/v1/user/login.php",
         headers={
             "Origin": "https://geotastic.net",
             "Referer": "https://geotastic.net/",
         },
-        json={"credentials": {"fingerprint": FINGERPRINT, **creds}},
+        json={"credentials": {"fingerprint": fingerprint, **creds}},
     )
     if response.ok:
         json_response = response.json()
