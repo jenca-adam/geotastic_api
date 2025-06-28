@@ -1,6 +1,8 @@
 from . import generic
+from .client import Client
 
 
+@Client._register_endpoint
 def get_app_config(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -9,6 +11,7 @@ def get_app_config(auth_token=None):
     )
 
 
+@Client._register_endpoint
 def get_community_map_markers(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(

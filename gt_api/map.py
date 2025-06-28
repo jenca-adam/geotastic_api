@@ -1,6 +1,8 @@
 from . import generic
+from .client import Client
 
 
+@Client._register_endpoint
 def get_public_drop_groups(map_id, include_tags=True, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -11,6 +13,7 @@ def get_public_drop_groups(map_id, include_tags=True, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def create_drop_group(map_id, lat, lng, code, title, auth_token=None, **properties):
     data = {
         "mapId": map_id,
@@ -30,6 +33,7 @@ def create_drop_group(map_id, lat, lng, code, title, auth_token=None, **properti
     return generic.process_response(response)
 
 
+@Client._register_endpoint
 def update_drop_group(group_id, auth_token=None, **properties):
     data = {"id": group_id, **properties}
     response = generic.geotastic_api_request(
@@ -41,6 +45,7 @@ def update_drop_group(group_id, auth_token=None, **properties):
     return generic.process_response(response)
 
 
+@Client._register_endpoint
 def get_drop_groups(map_id, auth_token=None):
     response = generic.geotastic_api_request(
         "https://api.geotastic.net/v1/maps/getDropGroups.php",
@@ -51,6 +56,7 @@ def get_drop_groups(map_id, auth_token=None):
     return generic.process_response(response)
 
 
+@Client._register_endpoint
 def delete_drop_group(drop_group_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -62,6 +68,7 @@ def delete_drop_group(drop_group_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def delete_drop(drop_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -73,6 +80,7 @@ def delete_drop(drop_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def import_drops(drops, target_id, target_type, import_type="merge", auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -91,6 +99,7 @@ def import_drops(drops, target_id, target_type, import_type="merge", auth_token=
     )
 
 
+@Client._register_endpoint
 def get_map_drops(map_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -102,6 +111,7 @@ def get_map_drops(map_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def get_group_drops(group_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -113,6 +123,7 @@ def get_group_drops(group_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def update_map(map_id, auth_token=None, **properties):
     data = {"id": map_id, **properties}
     return generic.process_response(
@@ -125,6 +136,7 @@ def update_map(map_id, auth_token=None, **properties):
     )
 
 
+@Client._register_endpoint
 def delete_map(map_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -136,6 +148,7 @@ def delete_map(map_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def get_own_maps(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -144,6 +157,7 @@ def get_own_maps(auth_token=None):
     )
 
 
+@Client._register_endpoint
 def get_playable_maps(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -152,6 +166,7 @@ def get_playable_maps(auth_token=None):
     )
 
 
+@Client._register_endpoint
 def random_single_map_drop(map_id, used_ids=[], auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -163,6 +178,7 @@ def random_single_map_drop(map_id, used_ids=[], auth_token=None):
     )
 
 
+@Client._register_endpoint
 def random_grouped_map_drop(
     map_id, removed_groups=[], used_ids=[], picker="balanced", auth_token=None
 ):
@@ -180,6 +196,7 @@ def random_grouped_map_drop(
     return process_response(response)
 
 
+@Client._register_endpoint
 def get_map_tags(map_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -191,6 +208,19 @@ def get_map_tags(map_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
+def get_maps_by_user(uid, auth_token=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/maps/getPlayableMapsByUser.php",
+            "GET",
+            auth_token,
+            params={"uid": uid},
+        )
+    )
+
+
+@Client._register_endpoint
 def increase_play_count(map_id, auth_token=None):
     response = generic.geotastic_api_request(
         "https://backend01.geotastic.net/v1/maps/incrementPlayedMapAmountV2.php",

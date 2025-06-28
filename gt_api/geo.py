@@ -1,7 +1,9 @@
 from . import generic
+from .client import Client
 
 
 # reverse geocoding
+@Client._register_endpoint
 def reverse(lat, lng, auth_token=None, omit_border_data=True, skip_state_check=False):
     enc = generic.encode_encdata(
         {

@@ -1,6 +1,8 @@
 from . import generic
+from .client import Client
 
 
+@Client._register_endpoint
 def get_all_user_challenges(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -11,6 +13,7 @@ def get_all_user_challenges(auth_token=None):
     )
 
 
+@Client._register_endpoint
 def get_challenge_drops(challenge_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -22,6 +25,7 @@ def get_challenge_drops(challenge_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def get_challenge_results(challenge_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
@@ -33,6 +37,7 @@ def get_challenge_results(challenge_id, auth_token=None):
     )
 
 
+@Client._register_endpoint
 def get_own_challenges(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
