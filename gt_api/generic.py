@@ -52,7 +52,6 @@ def process_response(response):
         else:
             raise GeotasticAPIError(json_response["message"])
     else:
-        return response
         raise GeotasticAPIError(f"{response.status_code} {response.reason}")
 
 
