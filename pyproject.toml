@@ -11,7 +11,8 @@ name = "gt_api"
 version = "0.0.2"
 dependencies = [
 	"pycryptodome",
-	"requests"
+	"requests",
+	"websockets"
 ]
 description = "Geotastic internal API wrapper"
 readme = "README.md"
