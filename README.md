@@ -81,9 +81,21 @@ client.import_drops(drops, 12345, target_type="map", import_type="merge")
 Possible target types are `map` and `group`.
 Possible import types are `merge`, `override` and `update`.
 
+### Lobbies
+
+Lobbies are handled a little differently.
+To create a lobby, use `Lobby.create(token)`.
+To join a lobby, user `Lobby.join(token, lobby_id)`.
+You then add handlers for events coming in from the Lobby socket using the `lobby.add_handler("event")` decorator. The handler for the event "\*" will be called for every event.
+You can send socket messages to the lobby using `lobby.send_message(type, **kwargs)`. The kwargs will be added to the message json.
+You can make lobby api requests using `lobby.lobby_api_request(url, method *args, **kwargs)`. Args and kwargs will be passed to `request.request()`.
+To run the lobby event loop, use `Lobby.run()`
+To disconnect from the lobby, use `Lobby.disconnect()`
+Look at `lobby_example.py`
 ### Other uses
 
 There's loads more I can't be bothered to document. Check the source code.
+
 
 ## Contributing
 

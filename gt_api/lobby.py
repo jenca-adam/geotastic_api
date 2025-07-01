@@ -9,8 +9,6 @@ CLIENT_VERSION = "0.297.13"
 
 
 class Lobby:
-    handlers = {}
-
     def __init__(self, connection, auth_token):
         self.connection = connection
         self.auth_token = auth_token
@@ -19,12 +17,12 @@ class Lobby:
         self.running = False
         self.lobby_token = None
         self.lobby_id = None
+        self.handlers = {"fullLobby":[self.handle_full_lobby]}
 
-    @classmethod
-    def event_handler(cls, event):
+    def event_handler(self, event):
         def decorator(function):
-            cls.handlers.setdefault(event, [])
-            cls.handlers[event].append(function)
+            self.handlers.setdefault(event, [])
+            self.handlers[event].append(function)
             return function
 
         return decorator
@@ -91,9 +89,16 @@ class Lobby:
             subprotocols=["geotastic-protocol"],
         )
         return cls(sock, auth_token)
+    
+    @classmethod
+    def join(cls, auth_token, lobby_id, name='', server="multiplayer02"):
+        sock = connect(
+            f"wss://{server}.geotastic.net/?client_version={CLIENT_VERSION}&t={auth_token}&la={lobby_id}&n={name}&a=joinLobby",
+            origin="https://geotastic.net",
+            subprotocols=["geotastic-protocol"],
+        )
+        return cls(sock, auth_token)
 
-
-@Lobby.event_handler("fullLobby")
-def handle_full_lobby(lobby, type, message):
-    lobby.lobby_token = message["token"]
-    lobby.lobby_id = message["lobby"]["id"]
+    def handle_full_lobby(self, lobby, type, message):
+        lobby.lobby_token = message["token"]
+        lobby.lobby_id = message["lobby"]["id"]

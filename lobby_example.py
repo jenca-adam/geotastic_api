@@ -7,16 +7,15 @@ TOKEN = os.environ["GT_TOKEN"]
 guess_data = None
 
 
-class CustomLobby(gt_api.Lobby):
-    pass
 
+lobby = gt_api.Lobby.create(TOKEN)
 
-@CustomLobby.event_handler("*")
+@lobby.event_handler("*")
 def handle_any(lobby, type, message):
     print(type, message)
 
 
-@CustomLobby.event_handler("newRoundData")
+@lobby.event_handler("newRoundData")
 def handle_new_round_data(lobby, type, message):
     global guess_data
     guess_data = {
@@ -33,7 +32,7 @@ def handle_new_round_data(lobby, type, message):
     print("SUBMITTED")
 
 
-@CustomLobby.event_handler("timeUpdate")
+@lobby.event_handler("timeUpdate")
 def handle_time_update(lobby, type, message):
     if message["time"] != 180:
         return
@@ -46,20 +45,19 @@ def handle_time_update(lobby, type, message):
     print("FINISHED")
 
 
-@CustomLobby.event_handler("roundResults")
+@lobby.event_handler("roundResults")
 def handle_round_results(lobby, type, message):
     time.sleep(2)  # s u p e r scuffed
     lobby.send_message("nextRound")
 
 
-@CustomLobby.event_handler("totalResults")
+@lobby.event_handler("totalResults")
 def handle_total_results(lobby, type, message):
     time.sleep(5)
     lobby.send_message("backToLobby")
     new_game()
 
 
-lobby = CustomLobby.create(TOKEN)
 lobby.run()
 
 
