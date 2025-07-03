@@ -55,7 +55,6 @@ class Lobby:
         self.connection.close()
 
     def lobby_api_request(self, url, method, *args, **kwargs):
-        print(self.lobby_id, self.lobby_token)
         return generic.geotastic_api_request(
             url,
             method,
@@ -100,10 +99,6 @@ class Lobby:
 
     @classmethod
     def join(cls, auth_token, lobby_id, name="", server="multiplayer02"):
-        print(
-            f"wss://{server}.geotastic.net/?client_version={CLIENT_VERSION}&t={auth_token}&la={lobby_id}&n={name}&a=joinLobby"
-        )
-
         sock = connect(
             f"wss://{server}.geotastic.net/?client_version={CLIENT_VERSION}&t={auth_token}&la={lobby_id}&n={name}&a=joinLobby",
             origin="https://geotastic.net",
