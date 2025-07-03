@@ -2,6 +2,7 @@ from websockets.sync.client import connect
 from websockets import ConnectionClosed
 from . import generic
 from .errors import LobbyError
+from .client import Client
 import threading
 import json
 
@@ -110,3 +111,15 @@ class Lobby:
         lobby.lobby_token = message["token"]
         lobby.lobby_id = message["lobby"]["id"]
         lobby.lobby_settings = message["lobby"]["settingsOptions"]["settings"]
+
+
+@Client._register_endpoint
+def get_lobby_from_alias(alias, auth_token=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/lobby/getLobbyFromAlias.php",
+            "GET",
+            auth_token,
+            params={"alias": alias},
+        )
+    )
