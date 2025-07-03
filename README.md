@@ -91,7 +91,7 @@ You can send socket messages to the lobby using `lobby.send_message(type, **kwar
 You can make lobby api requests using `lobby.lobby_api_request(url, method *args, **kwargs)`. Args and kwargs will be passed to `request.request()`.
 To run the lobby event loop, use `Lobby.run()`
 To disconnect from the lobby, use `Lobby.disconnect()`
-Look at `lobby_example.py`
+Look at `examples/auto_lobby.py`
 ### Other uses
 
 There's loads more I can't be bothered to document. Check the source code.

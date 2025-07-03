@@ -238,6 +238,18 @@ def get_maps_by_user(uid, auth_token=None):
 
 
 @Client._register_endpoint
+def get_map_info(map_id, auth_token=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/maps/getPlayableMap.php",
+            "GET",
+            auth_token,
+            params={"id": map_id},
+        )
+    )
+
+
+@Client._register_endpoint
 def increase_play_count(map_id, auth_token=None):
     response = generic.geotastic_api_request(
         "https://backend01.geotastic.net/v1/maps/incrementPlayedMapAmountV2.php",

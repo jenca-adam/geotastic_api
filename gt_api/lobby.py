@@ -5,7 +5,7 @@ from .errors import LobbyError
 import threading
 import json
 
-CLIENT_VERSION = "0.297.13"
+CLIENT_VERSION = "0.297.17"
 
 
 class Lobby:
@@ -17,7 +17,8 @@ class Lobby:
         self.running = False
         self.lobby_token = None
         self.lobby_id = None
-        self.handlers = {"fullLobby":[self.handle_full_lobby]}
+        self.lobby_settings = None
+        self.handlers = {"fullLobby": [self.handle_full_lobby]}
 
     def event_handler(self, event):
         def decorator(function):
@@ -27,11 +28,21 @@ class Lobby:
 
         return decorator
 
+    def feed_event(self, message):
+        for handler in self.handlers.get(message["type"], []) + self.handlers.get(
+            "*", []
+        ):
+            threading.Thread(
+                target=handler,
+                args=(self, message["type"], message.get("data")),
+            ).start()  # run in a separate thread so as to not block the event loop
+
     def run(self):
         if self.running:
             raise RuntimeError("already running")
         try:
-            ack = self.connection.recv()
+            ack = generic.decode_websocket(self.connection.recv())
+            self.feed_event(ack)
         except ConnectionClosed:
             self.close_reason = self.connection.close_reason
             raise LobbyError(
@@ -44,6 +55,7 @@ class Lobby:
         self.connection.close()
 
     def lobby_api_request(self, url, method, *args, **kwargs):
+        print(self.lobby_id, self.lobby_token)
         return generic.geotastic_api_request(
             url,
             method,
@@ -58,16 +70,12 @@ class Lobby:
             try:
                 self.close_reason = self.connection.close_reason
                 message = generic.decode_websocket(self.connection.recv())
-                for handler in self.handlers.get(
-                    message["type"], []
-                ) + self.handlers.get("*", []):
-                    threading.Thread(
-                        target=handler,
-                        args=(self, message["type"], message.get("data")),
-                    ).start()  # run in a separate thread so as to not block the event loop
+                self.feed_event(message)
             except ConnectionClosed:
                 self.running = False
-                break
+                raise LobbyError(
+                    f"Disconnected by server: {self.connection.close_reason}"
+                ) from None
 
     def send_message(self, type, **kwargs):
         if not self.running:
@@ -89,9 +97,13 @@ class Lobby:
             subprotocols=["geotastic-protocol"],
         )
         return cls(sock, auth_token)
-    
+
     @classmethod
-    def join(cls, auth_token, lobby_id, name='', server="multiplayer02"):
+    def join(cls, auth_token, lobby_id, name="", server="multiplayer02"):
+        print(
+            f"wss://{server}.geotastic.net/?client_version={CLIENT_VERSION}&t={auth_token}&la={lobby_id}&n={name}&a=joinLobby"
+        )
+
         sock = connect(
             f"wss://{server}.geotastic.net/?client_version={CLIENT_VERSION}&t={auth_token}&la={lobby_id}&n={name}&a=joinLobby",
             origin="https://geotastic.net",
@@ -102,3 +114,4 @@ class Lobby:
     def handle_full_lobby(self, lobby, type, message):
         lobby.lobby_token = message["token"]
         lobby.lobby_id = message["lobby"]["id"]
+        lobby.lobby_settings = message["lobby"]["settingsOptions"]["settings"]

@@ -7,8 +7,8 @@ TOKEN = os.environ["GT_TOKEN"]
 guess_data = None
 
 
-
 lobby = gt_api.Lobby.create(TOKEN)
+
 
 @lobby.event_handler("*")
 def handle_any(lobby, type, message):
@@ -62,9 +62,7 @@ lobby.run()
 
 
 def new_game():
-    print("Press ENTER to start game")
-    input()
-    print("nope")
+    time.sleep(3)
     lobby.send_message("startGame")
 
 
