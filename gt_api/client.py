@@ -3,12 +3,15 @@ from . import login
 
 
 class Client:
-    def __init__(self, auth_token, user_data={}):
+    def __init__(self, auth_token):
         self.auth_token = auth_token
-        self.user_data = user_data
+        self._user_data = None
 
-    def get_user_data(self):
-        return login.login(token=self.auth_token)
+    @property
+    def user_data(self):
+        if self._user_data is None:
+            self._user_data = self.get_user_info()
+        return self._user_data
 
     @classmethod
     def _register_endpoint(cls, endpoint):
@@ -23,7 +26,7 @@ class Client:
     @classmethod
     def login(cls, mail, password):
         login_result = login.login(mail=mail, password=password)
-        return cls(login_result["token"], login_result)
+        return cls(login_result["token"])
 
     def __repr__(self):
         return f"<Client (auth_token={self.auth_token!r})>"

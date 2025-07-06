@@ -43,6 +43,12 @@ Please note that the token is one per session, so once you log out of the sessio
 
 Use `Client(None)`.
 Most functions will not work.
+#### Accessing user data
+```python
+data = client.user_data
+nickname = data['nickname']
+uid = data['uid']
+```
 ### Creating a drop group
 
 ```python
