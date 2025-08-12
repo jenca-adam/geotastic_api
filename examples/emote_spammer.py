@@ -6,7 +6,7 @@ import time
 
 token = os.environ["GT_TOKEN"]
 
-lobby = gt_api.Lobby.join(token, input("Lobby id:"))
+lobby = gt_api.Lobby.join(token, input("Lobby id:"), server="multiplayer03")
 lobby.run()
 
 
