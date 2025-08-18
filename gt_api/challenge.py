@@ -26,6 +26,18 @@ def get_challenge_drops(challenge_id, auth_token=None):
 
 
 @Client._register_endpoint
+def get_challenge(uid, auth_token=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/challenge/getChallenge2.php",
+            "GET",
+            auth_token,
+            params={"uid": uid},
+        )
+    )
+
+
+@Client._register_endpoint
 def get_challenge_results(challenge_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
