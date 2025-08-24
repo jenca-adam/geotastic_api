@@ -258,3 +258,15 @@ def increase_play_count(map_id, auth_token=None):
         json={"enc": generic.encode_encdata({"mapId": map_id})},
     )
     return generic.process_response(response)
+
+
+@Client._register_endpoint
+def update_drop(drop_data, auth_token=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://api.geotastic.net/v1/maps/updateDropV2.php",
+            "POST",
+            auth_token,
+            json=drop_data,
+        )
+    )
