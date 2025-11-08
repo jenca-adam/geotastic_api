@@ -184,33 +184,61 @@ def get_playable_maps(auth_token=None):
 
 
 @Client._register_endpoint
-def random_single_map_drop(map_id, used_ids=[], auth_token=None):
+def random_single_map_drop(map_id, used_drops=[], auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
             "https://api.geotastic.net/v1/maps/getRandomDropFromSingleDropMap.php",
             "GET",
             auth_token,
-            params={"mapId": map_id, "usedIds": ",".join(map(str, used_ids))},
+            params={"mapId": map_id, "usedIds": ",".join(map(str, used_drops))},
         )
     )
 
 
 @Client._register_endpoint
 def random_grouped_map_drop(
-    map_id, removed_groups=[], used_ids=[], picker="balanced", auth_token=None
+    map_id, removed_groups=[], used_drops=[], picker="balanced", auth_token=None
 ):
-    response = geotastic_api_request(
+    response = generic.geotastic_api_request(
         "https://api.geotastic.net/v1/maps/getRandomDropFromGroupedDropMap.php",
         "GET",
         auth_token,
         params={
             "mapId": map_id,
             "rg": ",".join(map(str, removed_groups)),
-            "used": ",".join(map(str, used_ids)),
+            "used": ",".join(map(str, used_drops)),
             "sm": picker,
         },
     )
-    return process_response(response)
+    return generic.process_response(response)
+
+
+@Client._register_endpoint
+def n_random_drops(
+    map_id,
+    removed_groups=[],
+    used_drops=[],
+    picker="balanced",
+    current_round=1,
+    keep_drop_order=False,
+    unique_drop_groups_only=False,
+    auth_token=None,
+):
+    response = generic.geotastic_api_request(
+        "https://api.geotastic.net/v1/maps/getNRandomDropsFromMapV2.php",
+        "POST",
+        auth_token,
+        json={
+            "currentRound": current_round,
+            "keepDropOrder": keep_drop_order,
+            "mapId": map_id,
+            "removedGroupIds": removed_groups,
+            "searchMode": picker,
+            "uniqueDropGroupsOnly": unique_drop_groups_only,
+            "usedDropIds": used_drops,
+        },
+    )
+    return generic.process_response(response)
 
 
 @Client._register_endpoint
