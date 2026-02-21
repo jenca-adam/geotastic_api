@@ -6,7 +6,7 @@ from .client import Client
 def get_all_hunts(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/highscoreHunt/getAllHighscoreHunts.php",
+            "https://backend03.geotastic.net/v1/highscoreHunt/getAllHighscoreHunts.php",
             "GET",
             auth_token,
         )

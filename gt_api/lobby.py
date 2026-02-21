@@ -6,7 +6,7 @@ from .client import Client
 import threading
 import json
 
-CLIENT_VERSION = "0.297.17"
+CLIENT_VERSION = "0.306.9"
 
 
 class Lobby:
@@ -34,7 +34,7 @@ class Lobby:
             "*", []
         ):
             threading.Thread(
-                target=handler,
+                target=lambda: handler(),
                 args=(self, message["type"], message.get("data")),
             ).start()  # run in a separate thread so as to not block the event loop
 
@@ -90,18 +90,25 @@ class Lobby:
         self.connection.send(json.dumps(payload))
 
     @classmethod
-    def create(cls, auth_token, server="multiplayer02"):
+    def create(cls, auth_token, server="multiplayer02", client_version=CLIENT_VERSION):
         sock = connect(
-            f"wss://{server}.geotastic.net/?client_version={CLIENT_VERSION}&t={auth_token}&a=createNewCustomLobby",
+            f"wss://{server}.geotastic.net/?client_version={client_version}&t={auth_token}&a=createNewCustomLobby",
             origin="https://geotastic.net",
             subprotocols=["geotastic-protocol"],
         )
         return cls(sock, auth_token)
 
     @classmethod
-    def join(cls, auth_token, lobby_id, name="", server="multiplayer02"):
+    def join(
+        cls,
+        auth_token,
+        lobby_id,
+        name="",
+        server="multiplayer02",
+        client_version=CLIENT_VERSION,
+    ):
         sock = connect(
-            f"wss://{server}.geotastic.net/?client_version={CLIENT_VERSION}&t={auth_token}&la={lobby_id}&n={name}&a=joinLobby",
+            f"wss://{server}.geotastic.net/?client_version={client_version}&t={auth_token}&la={lobby_id}&n={name}&a=joinLobby",
             origin="https://geotastic.net",
             subprotocols=["geotastic-protocol"],
         )
@@ -117,7 +124,7 @@ class Lobby:
 def get_lobby_from_alias(alias, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/lobby/getLobbyFromAlias.php",
+            "https://backend03.geotastic.net/v1/lobby/getLobbyFromAlias.php",
             "GET",
             auth_token,
             params={"alias": alias},

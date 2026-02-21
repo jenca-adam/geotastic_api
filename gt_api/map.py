@@ -7,7 +7,7 @@ def create_tag(tag_name, auth_token=None):
     data = generic.encode_encdata({"tag": tag_name})
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/createTagV2.php",
+            "https://backend03.geotastic.net/v1/maps/createTagV2.php",
             "POST",
             auth_token,
             json={"enc": data},
@@ -19,7 +19,7 @@ def create_tag(tag_name, auth_token=None):
 def get_public_drop_groups(map_id, include_tags=True, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getPublicDropGroups.php",
+            "https://backend03.geotastic.net/v1/maps/getPublicDropGroups.php",
             "GET",
             params={"mapId": map_id, "withTags": include_tags},
         )
@@ -42,7 +42,7 @@ def create_drop_group(
         **properties,
     }
     response = generic.geotastic_api_request(
-        "https://api.geotastic.net/v1/maps/updateDropGroup.php",
+        "https://backend03.geotastic.net/v1/maps/updateDropGroup.php",
         "POST",
         auth_token,
         json=data,
@@ -54,7 +54,7 @@ def create_drop_group(
 def update_drop_group(group_id, auth_token=None, **properties):
     data = {"id": group_id, **properties}
     response = generic.geotastic_api_request(
-        "https://api.geotastic.net/v1/maps/updateDropGroup.php",
+        "https://backend03.geotastic.net/v1/maps/updateDropGroup.php",
         "POST",
         auth_token,
         json=data,
@@ -65,7 +65,7 @@ def update_drop_group(group_id, auth_token=None, **properties):
 @Client._register_endpoint
 def get_drop_groups(map_id, auth_token=None):
     response = generic.geotastic_api_request(
-        "https://api.geotastic.net/v1/maps/getDropGroups.php",
+        "https://backend03.geotastic.net/v1/maps/getDropGroups.php",
         "GET",
         auth_token,
         params={"mapId": map_id},
@@ -77,7 +77,7 @@ def get_drop_groups(map_id, auth_token=None):
 def delete_drop_group(drop_group_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/deleteDropGroupV2.php",
+            "https://backend03.geotastic.net/v1/maps/deleteDropGroupV2.php",
             "POST",
             auth_token,
             json={"dropGroupId": drop_group_id},
@@ -89,7 +89,7 @@ def delete_drop_group(drop_group_id, auth_token=None):
 def delete_drop(drop_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/deleteDropV2.php",
+            "https://backend03.geotastic.net/v1/maps/deleteDropV2.php",
             "POST",
             auth_token,
             json={"dropId": drop_id},
@@ -101,7 +101,7 @@ def delete_drop(drop_id, auth_token=None):
 def import_drops(drops, target_id, target_type, import_type="merge", auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/drops/importDrops.php",
+            "https://backend03.geotastic.net/v1/drops/importDrops.php",
             "POST",
             auth_token,
             json={
@@ -120,7 +120,7 @@ def import_drops(drops, target_id, target_type, import_type="merge", auth_token=
 def get_map_drops(map_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getDrops.php",
+            "https://backend03.geotastic.net/v1/maps/getDrops.php",
             "GET",
             auth_token,
             params={"mapId": map_id},
@@ -132,7 +132,7 @@ def get_map_drops(map_id, auth_token=None):
 def get_group_drops(group_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getDrops.php",
+            "https://backend03.geotastic.net/v1/maps/getDrops.php",
             "GET",
             auth_token,
             params={"groupId": group_id},
@@ -145,7 +145,7 @@ def update_map(map_id, auth_token=None, **properties):
     data = {"id": map_id, **properties}
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/updateMapV2.php",
+            "https://backend03.geotastic.net/v1/maps/updateMapV2.php",
             "POST",
             auth_token,
             json={"enc": generic.encode_encdata(data)},
@@ -157,7 +157,7 @@ def update_map(map_id, auth_token=None, **properties):
 def delete_map(map_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/deleteMap.php",
+            "https://backend03.geotastic.net/v1/maps/deleteMap.php",
             "POST",
             auth_token,
             data=str(map_id),
@@ -169,7 +169,7 @@ def delete_map(map_id, auth_token=None):
 def get_own_maps(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getMaps.php", "GET", auth_token
+            "https://backend03.geotastic.net/v1/maps/getMaps.php", "GET", auth_token
         )
     )
 
@@ -178,7 +178,9 @@ def get_own_maps(auth_token=None):
 def get_playable_maps(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getPlayableMaps.php", "GET", auth_token
+            "https://backend03.geotastic.net/v1/maps/getPlayableMaps.php",
+            "GET",
+            auth_token,
         )
     )
 
@@ -187,7 +189,7 @@ def get_playable_maps(auth_token=None):
 def random_single_map_drop(map_id, used_drops=[], auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getRandomDropFromSingleDropMap.php",
+            "https://backend03.geotastic.net/v1/maps/getRandomDropFromSingleDropMap.php",
             "GET",
             auth_token,
             params={"mapId": map_id, "usedIds": ",".join(map(str, used_drops))},
@@ -200,7 +202,7 @@ def random_grouped_map_drop(
     map_id, removed_groups=[], used_drops=[], picker="balanced", auth_token=None
 ):
     response = generic.geotastic_api_request(
-        "https://api.geotastic.net/v1/maps/getRandomDropFromGroupedDropMap.php",
+        "https://backend03.geotastic.net/v1/maps/getRandomDropFromGroupedDropMap.php",
         "GET",
         auth_token,
         params={
@@ -225,7 +227,7 @@ def n_random_drops(
     auth_token=None,
 ):
     response = generic.geotastic_api_request(
-        "https://api.geotastic.net/v1/maps/getNRandomDropsFromMapV2.php",
+        "https://backend03.geotastic.net/v1/maps/getNRandomDropsFromMapV2.php",
         "POST",
         auth_token,
         json={
@@ -245,7 +247,7 @@ def n_random_drops(
 def get_map_tags(map_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getTagsByMap.php",
+            "https://backend03.geotastic.net/v1/maps/getTagsByMap.php",
             "GET",
             auth_token,
             params={"mapId": map_id},
@@ -257,7 +259,7 @@ def get_map_tags(map_id, auth_token=None):
 def get_maps_by_user(uid, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getPlayableMapsByUser.php",
+            "https://backend03.geotastic.net/v1/maps/getPlayableMapsByUser.php",
             "GET",
             auth_token,
             params={"uid": uid},
@@ -269,7 +271,7 @@ def get_maps_by_user(uid, auth_token=None):
 def get_map_info(map_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/getPlayableMap.php",
+            "https://backend03.geotastic.net/v1/maps/getPlayableMap.php",
             "GET",
             auth_token,
             params={"id": map_id},
@@ -280,7 +282,7 @@ def get_map_info(map_id, auth_token=None):
 @Client._register_endpoint
 def increase_play_count(map_id, auth_token=None):
     response = generic.geotastic_api_request(
-        "https://backend01.geotastic.net/v1/maps/incrementPlayedMapAmountV2.php",
+        "https://backend03.geotastic.net/v1/maps/incrementPlayedMapAmountV2.php",
         "POST",
         auth_token,
         json={"enc": generic.encode_encdata({"mapId": map_id})},
@@ -292,7 +294,7 @@ def increase_play_count(map_id, auth_token=None):
 def update_drop(drop_data, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/maps/updateDropV2.php",
+            "https://backend03.geotastic.net/v1/maps/updateDropV2.php",
             "POST",
             auth_token,
             json=drop_data,

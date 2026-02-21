@@ -8,7 +8,7 @@ def update_preset_settings(preset_id, settings, auth_token=None):
     print(data)
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/settings/updatePresetSettingsV2.php",
+            "https://backend03.geotastic.net/v1/settings/updatePresetSettingsV2.php",
             "POST",
             auth_token,
             json={"enc": data},

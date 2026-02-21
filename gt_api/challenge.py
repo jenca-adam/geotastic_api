@@ -6,7 +6,7 @@ from .client import Client
 def get_all_user_challenges(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/challenge/getAllUserChallenges.php",
+            "https://backend03.geotastic.net/v1/challenge/getAllUserChallenges.php",
             "GET",
             auth_token,
         )
@@ -17,7 +17,7 @@ def get_all_user_challenges(auth_token=None):
 def get_challenge_drops(challenge_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/challenge/getChallengeDrops.php",
+            "https://backend03.geotastic.net/v1/challenge/getChallengeDrops.php",
             "GET",
             auth_token,
             params={"id": challenge_id},
@@ -29,7 +29,7 @@ def get_challenge_drops(challenge_id, auth_token=None):
 def get_challenge(uid, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/challenge/getChallenge2.php",
+            "https://backend03.geotastic.net/v1/challenge/getChallenge2.php",
             "GET",
             auth_token,
             params={"uid": uid},
@@ -41,7 +41,7 @@ def get_challenge(uid, auth_token=None):
 def get_challenge_results(challenge_id, auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/challenge/getChallengeResults.php",
+            "https://backend03.geotastic.net/v1/challenge/getChallengeResults.php",
             "GET",
             auth_token,
             params={"id": challenge_id},
@@ -53,7 +53,7 @@ def get_challenge_results(challenge_id, auth_token=None):
 def get_own_challenges(auth_token=None):
     return generic.process_response(
         generic.geotastic_api_request(
-            "https://api.geotastic.net/v1/challenge/getOwnChallenges.php",
+            "https://backend03.geotastic.net/v1/challenge/getOwnChallenges.php",
             "GET",
             auth_token,
         )

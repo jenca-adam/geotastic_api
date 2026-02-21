@@ -15,7 +15,7 @@ def login(mail=None, password=None, token=None, fingerprint=None):
     if token:
         creds["token"] = token
     response = requests.post(
-        "https://api.geotastic.net/v1/user/login.php",
+        "https://backend03.geotastic.net/v1/user/login.php",
         headers={
             "Origin": "https://geotastic.net",
             "Referer": "https://geotastic.net/",

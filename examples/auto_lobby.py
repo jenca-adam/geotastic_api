@@ -1,8 +1,6 @@
 import gt_api
 import os
 import time
-import requests
-import threading
 import random
 
 TOKEN = os.environ["GT_TOKEN"]
