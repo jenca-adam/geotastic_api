@@ -216,8 +216,9 @@ def random_grouped_map_drop(
 
 
 @Client._register_endpoint
-def n_random_drops(
+def get_n_random_drops(
     map_id,
+    amount=1,
     removed_groups=[],
     used_drops=[],
     picker="balanced",
@@ -231,6 +232,7 @@ def n_random_drops(
         "POST",
         auth_token,
         json={
+            "amount": amount,
             "currentRound": current_round,
             "keepDropOrder": keep_drop_order,
             "mapId": map_id,

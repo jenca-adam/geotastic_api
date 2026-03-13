@@ -6,7 +6,7 @@ from .client import Client
 import threading
 import json
 
-CLIENT_VERSION = "0.306.9"
+CLIENT_VERSION = "0.308.4"
 
 
 class Lobby:

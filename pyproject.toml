@@ -8,7 +8,7 @@ packages = ["gt_api"]
 
 [project]
 name = "gt_api"
-version = "0.306.9"
+version = "0.308.4"
 dependencies = [
 	"pycryptodome",
 	"requests",
