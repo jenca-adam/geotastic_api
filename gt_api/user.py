@@ -68,3 +68,16 @@ def get_user_info(auth_token=None):
             auth_token,
         )
     )
+
+
+@Client._register_endpoint
+def update_user(user_data, auth_token=None):
+    data = generic.encode_encdata(user_data)
+    return generic.process_response(
+        generic.geotastic_api_request(
+            "https://backend03.geotastic.net/v1/user/updateUserV2.php",
+            "POST",
+            auth_token,
+            json={"enc": data},
+        )
+    )
