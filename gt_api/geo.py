@@ -5,7 +5,14 @@ from .client import Client
 # reverse geocoding
 # precise
 @Client._register_endpoint
-def reverse(lat, lng, auth_token=None, omit_border_data=True, skip_state_check=False):
+def reverse(
+    lat,
+    lng,
+    auth_token=None,
+    session=None,
+    omit_border_data=True,
+    skip_state_check=False,
+):
     enc = generic.encode_encdata(
         {
             "latLng": {"lat": lat, "lng": lng},
@@ -15,17 +22,18 @@ def reverse(lat, lng, auth_token=None, omit_border_data=True, skip_state_check=F
     )
     response = generic.process_response(
         generic.geotastic_api_request(
-            "https://api01.geotastic.net/reverseV4", "POST", json={"enc": enc}
+            session, "https://api01.geotastic.net/reverseV4", "POST", json={"enc": enc}
         )
     )
     return response
 
 
 @Client._register_endpoint
-def reverse_batch(*latlngs, auth_token=None):
+def reverse_batch(*latlngs, auth_token=None, session=None):
 
     response = generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://api01.geotastic.net/reverseBatch",
             "POST",
             json={"latLng": [{"lat": lat, "lng": lng} for (lat, lng) in latlngs]},

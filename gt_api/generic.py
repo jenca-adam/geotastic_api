@@ -68,15 +68,15 @@ def process_response(response):
 
 
 def geotastic_api_request(
-    url, method, auth_token=None, extra_headers={}, *args, **kwargs
+    session, url, method, auth_token=None, extra_headers={}, *args, **kwargs
 ):
     # unethical :(
-
+    session = session or requests.Session()
     headers = {"Referer": "https://geotastic.net/", "Origin": "https://geotastic.net"}
     if auth_token:
         headers["X-Auth-Token"] = auth_token
     headers.update(extra_headers)
-    return requests.request(
+    return session.request(
         method,
         url,
         headers=headers,

@@ -4,7 +4,7 @@ import requests
 import os
 
 
-def login(mail=None, password=None, token=None, fingerprint=None):
+def login(mail=None, password=None, token=None, fingerprint=None, session=None):
     if fingerprint is None:
         fingerprint = os.urandom(16).hex()
     creds = {}
@@ -14,7 +14,9 @@ def login(mail=None, password=None, token=None, fingerprint=None):
         creds["password"] = password
     if token:
         creds["token"] = token
-    response = requests.post(
+    if session is None:
+        session = requests.Session()
+    response = session.post(
         "https://backend03.geotastic.net/v1/user/login.php",
         headers={
             "Origin": "https://geotastic.net",

@@ -6,7 +6,7 @@ from .client import Client
 import threading
 import json
 
-CLIENT_VERSION = "0.308.4"
+CLIENT_VERSION = "0.311.5"
 
 
 class Lobby:
@@ -57,6 +57,7 @@ class Lobby:
 
     def lobby_api_request(self, url, method, *args, **kwargs):
         return generic.geotastic_api_request(
+            session,
             url,
             method,
             self.auth_token,
@@ -121,9 +122,10 @@ class Lobby:
 
 
 @Client._register_endpoint
-def get_lobby_from_alias(alias, auth_token=None):
+def get_lobby_from_alias(alias, auth_token=None, session=None):
     return generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://backend03.geotastic.net/v1/lobby/getLobbyFromAlias.php",
             "GET",
             auth_token,

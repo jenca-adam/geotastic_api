@@ -1,4 +1,5 @@
 import functools
+import requests
 from . import login
 
 
@@ -6,6 +7,7 @@ class Client:
     def __init__(self, auth_token):
         self.auth_token = auth_token
         self._user_data = None
+        self.session = requests.Session()
 
     @property
     def user_data(self):
@@ -18,7 +20,9 @@ class Client:
 
         @functools.wraps(endpoint)
         def replaced(self, *args, **kwargs):
-            return endpoint(*args, **kwargs, auth_token=self.auth_token)
+            return endpoint(
+                *args, **kwargs, auth_token=self.auth_token, session=self.session
+            )
 
         setattr(cls, endpoint.__name__, replaced)
         return endpoint

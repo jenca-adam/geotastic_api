@@ -10,6 +10,7 @@ from . import (
     highscore_hunt,
     settings,
     matchmaking,
+    upload,
 )
 from .client import Client
 from .lobby import Lobby

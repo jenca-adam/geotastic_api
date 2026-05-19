@@ -4,7 +4,7 @@ from .client import Client
 
 
 @Client._register_endpoint
-def find_users(nickname=None, uid=None, auth_token=None):
+def find_users(nickname=None, uid=None, auth_token=None, session=None):
     if not ((nickname is None) ^ (uid is None)):
         raise ValueError("Specify exactly one of nickname, uid")
     params = {"p": "false"}
@@ -14,6 +14,7 @@ def find_users(nickname=None, uid=None, auth_token=None):
         params.udpate({"s": uid, "t": "uid"})
     return generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://backend03.geotastic.net/v1/user/getUserSuggestions.php",
             "GET",
             auth_token,
@@ -23,9 +24,10 @@ def find_users(nickname=None, uid=None, auth_token=None):
 
 
 @Client._register_endpoint
-def get_public_user_info(uid, auth_token=None):
+def get_public_user_info(uid, auth_token=None, session=None):
     return generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://backend03.geotastic.net/v1/user/getPublicUserInfoByUid.php",
             "GET",
             auth_token,
@@ -35,9 +37,10 @@ def get_public_user_info(uid, auth_token=None):
 
 
 @Client._register_endpoint
-def get_achievements(uid, auth_token=None):
+def get_achievements(uid, auth_token=None, session=None):
     return generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://backend03.geotastic.net/v1/user/getAchievementsByUser.php",
             "GET",
             auth_token,
@@ -47,10 +50,11 @@ def get_achievements(uid, auth_token=None):
 
 
 @Client._register_endpoint
-def get_statistics(uid, auth_token=None):
+def get_statistics(uid, auth_token=None, session=None):
     data = generic.encode_encdata({"userUid": uid})
     return generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://backend03.geotastic.net/v1/user/getUserStatistics.php",
             "POST",
             auth_token,
@@ -60,9 +64,10 @@ def get_statistics(uid, auth_token=None):
 
 
 @Client._register_endpoint
-def get_user_info(auth_token=None):
+def get_user_info(auth_token=None, session=None):
     return generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://backend03.geotastic.net/v1/user/getUserInfoViaToken.php",
             "GET",
             auth_token,
@@ -71,10 +76,11 @@ def get_user_info(auth_token=None):
 
 
 @Client._register_endpoint
-def update_user(user_data, auth_token=None):
+def update_user(user_data, auth_token=None, session=None):
     data = generic.encode_encdata(user_data)
     return generic.process_response(
         generic.geotastic_api_request(
+            session,
             "https://backend03.geotastic.net/v1/user/updateUserV2.php",
             "POST",
             auth_token,
