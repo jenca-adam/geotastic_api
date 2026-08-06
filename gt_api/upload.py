@@ -9,7 +9,7 @@ def upload_file(
     return generic.process_response(
         generic.geotastic_api_request(
             session,
-            "https://upload02.edutastic.de/put.php",
+            "https://upload.edutastic.de/put.php",
             "POST",
             auth_token,
             params={
@@ -26,7 +26,7 @@ def upload_remote_image(image_url, target, auth_token=None, session=None):
     return generic.process_response(
         generic.geotastic_api_request(
             session,
-            "https://upload02.edutastic.de/putRemoteImage.php",
+            "https://upload.edutastic.de/putRemoteImage.php",
             "POST",
             auth_token,
             json={"enc": generic.encode_encdata({"url": image_url, "target": target})},
