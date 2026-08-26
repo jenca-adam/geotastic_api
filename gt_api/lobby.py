@@ -6,11 +6,11 @@ from .client import Client
 import threading
 import json
 
-CLIENT_VERSION = "0.317.5"
+CLIENT_VERSION = "0.319.0"
 
 
 class Lobby:
-    def __init__(self, connection, auth_token):
+    def __init__(self, connection, auth_token, server):
         self.connection = connection
         self.auth_token = auth_token
         self.thread = threading.Thread(target=self._event_loop)
@@ -19,6 +19,8 @@ class Lobby:
         self.lobby_token = None
         self.lobby_id = None
         self.lobby_settings = None
+        self.game_settings = None
+        self.server = server
         self.handlers = {"fullLobby": [self.handle_full_lobby]}
 
     def event_handler(self, event):
@@ -34,7 +36,7 @@ class Lobby:
             "*", []
         ):
             threading.Thread(
-                target=lambda: handler(),
+                target=lambda *args: handler(*args),
                 args=(self, message["type"], message.get("data")),
             ).start()  # run in a separate thread so as to not block the event loop
 
@@ -52,10 +54,15 @@ class Lobby:
         self.running = True
         self.thread.start()
 
+    def close(self):
+        return self.lobby_api_request(
+            f"https://{self.server}.geotastic.net/closeLobby", "POST"
+        )
+
     def disconnect(self):
         self.connection.close()
 
-    def lobby_api_request(self, url, method, *args, **kwargs):
+    def lobby_api_request(self, url, method, session=None, *args, **kwargs):
         return generic.geotastic_api_request(
             session,
             url,
@@ -91,13 +98,13 @@ class Lobby:
         self.connection.send(json.dumps(payload))
 
     @classmethod
-    def create(cls, auth_token, server="multiplayer02", client_version=CLIENT_VERSION):
+    def create(cls, auth_token, server="multiplayer01", client_version=CLIENT_VERSION):
         sock = connect(
             f"wss://{server}.geotastic.net/?client_version={client_version}&t={auth_token}&a=createNewCustomLobby",
             origin="https://geotastic.net",
             subprotocols=["geotastic-protocol"],
         )
-        return cls(sock, auth_token)
+        return cls(sock, auth_token, server)
 
     @classmethod
     def join(
@@ -105,7 +112,7 @@ class Lobby:
         auth_token,
         lobby_id,
         name="",
-        server="multiplayer02",
+        server="multiplayer01",
         client_version=CLIENT_VERSION,
     ):
         sock = connect(
@@ -113,12 +120,13 @@ class Lobby:
             origin="https://geotastic.net",
             subprotocols=["geotastic-protocol"],
         )
-        return cls(sock, auth_token)
+        return cls(sock, auth_token, server)
 
     def handle_full_lobby(self, lobby, type, message):
         lobby.lobby_token = message["token"]
         lobby.lobby_id = message["lobby"]["id"]
-        lobby.lobby_settings = message["lobby"]["settingsOptions"]["settings"]
+        lobby.lobby_settings = message["lobby"]["lobbySettings"]
+        lobby.game_settings = message["lobby"]["settings"]
 
 
 @Client._register_endpoint

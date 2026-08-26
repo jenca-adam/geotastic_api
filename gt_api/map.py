@@ -213,6 +213,19 @@ def get_playable_maps(auth_token=None, session=None):
 
 
 @Client._register_endpoint
+def get_playable_map(map_id, auth_token=None, session=None):
+    return generic.process_response(
+        generic.geotastic_api_request(
+            session,
+            "https://backend03.geotastic.net/v1/maps/getPlayableMap.php",
+            "GET",
+            auth_token,
+            params={"id": map_id},
+        )
+    )
+
+
+@Client._register_endpoint
 def random_single_map_drop(map_id, used_drops=[], auth_token=None, session=None):
     return generic.process_response(
         generic.geotastic_api_request(
